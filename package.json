@@ -1,0 +1,13 @@
+
+{
+  "name": "iota-node-monitor",
+  "version": "0.1.0",
+  "author": "Harald Eberl",
+  "description": "An application to monitor if an IOTA node is synced",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/???"
+  },
+  "license": "GPL-3.0-only"
+}
