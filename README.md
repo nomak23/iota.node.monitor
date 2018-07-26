@@ -12,3 +12,11 @@ Rename the file config.sample.js to config.js and edit it with your text editor.
 3. **`sendRecoveryMessages`**: `Bool` Enable/disable recovery messages.
 
 All other settings are self explanatory.
+
+## Start the script
+
+In order to start the script, open your command line, browse to the iota.node.monitor direcotry and tpye the following: 
+
+```
+node index.js
+```
