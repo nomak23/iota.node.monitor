@@ -3,11 +3,11 @@ var nodemailer = require('nodemailer');
 
 module.exports = {
 
-    SendNotification: function (node, milestone, nodeMilestone)
+    SendNotification: function (node)
     {
         var nodeName = (node.name == "") ? "" : " (" + node.name + ")";
         var subject = "IOTA node " + node.host + ":" + node.port + nodeName + " is out of sync";
-        var bodytext = "Time of check: " + Date(Date.now()) + "\n\n" + "Coordinator milestone: " + milestone + "\n\n" + "Node milestone: " + nodeMilestone;
+        var bodytext = "Time of check: " + Date(Date.now()) + "\n\n" + "Coordinator milestone: " + node.nodeInfo.latestMilestoneIndex  + "\n\n" + "Node milestone: " + nodeInfo.latestSolidSubtangleMilestoneIndex;
 
         SendEmail(subject, bodytext, false);
     },

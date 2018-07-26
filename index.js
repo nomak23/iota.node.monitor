@@ -16,64 +16,66 @@ function Init()
 }
 
 function CheckNodes() {
-    GetLatestMilestoneIndex(function(milestone){
-        console.log("");
-        console.log(Date(Date.now()));
+    console.log("");
+    console.log(Date(Date.now()));
 
-        config.nodes.forEach(function(node) {            
+    config.nodes.forEach(function(node) {            
 
-            CheckNode(function(callbackValues)
-            {
-                callbackValues.nodeSynced ? console.log("\x1b[32m%s\x1b[0m", "Status: synced") : console.log("\x1b[31m%s\x1b[0m", "Status: out of sync");
-                console.log("");
+        CheckNode(function(callbackValues)
+        {
+            callbackValues.nodeSynced ? console.log("\x1b[32m%s\x1b[0m", "Status: synced") : console.log("\x1b[31m%s\x1b[0m", "Status: out of sync");
+            console.log("");
 
-                if(!callbackValues.nodeSynced) {
-                    if(!node.notificationSent)
-                    {
-                        notifications.SendNotification(node, milestone, callbackValues.nodeMilestone);
-                    }
-
-                    node.isSynced = false;
-                    node.notificationSent = true;
-                } else {                    
-                    if(!node.isSynced && config.sendRecoveryMessages)
-                    {
-                        notifications.SendRecoveryNotification(node);
-                    }
-
-                    node.isSynced = true;
-                    node.notificationSent = false;
+            if(!callbackValues.nodeSynced) {
+                if(!node.notificationSent)
+                {
+                    notifications.SendNotification(node, callbackValues.nodeMilestone);
                 }
 
-            }, node, milestone);
-            
-            console.log("");
-        });        
-    }); 
+                node.isSynced = false;
+                node.notificationSent = true;
+            } else {                    
+                if(!node.isSynced && config.sendRecoveryMessages)
+                {
+                    notifications.SendRecoveryNotification(node);
+                }
+
+                node.isSynced = true;
+                node.notificationSent = false;
+            }
+
+        }, node);
+        
+        console.log("");
+    });        
         
     setTimeout(CheckNodes, config.interval * 1000);
 }
 
-function CheckNode(callback, node, milestone)
+function CheckNode(callback, node)
 {               
     GetNodeInfo(function(nodeInfo){
         var nodeName = (node.name == "") ? "" : " (" + node.name + ")";
-       
+
+        var cooMilestone = nodeInfo.latestMilestoneIndex;
+        var nodeMilestone = nodeInfo.latestSolidSubtangleMilestoneIndex;
+
         console.log("Node: " + node.host + ":" + node.port + nodeName);
-        console.log("Coordinator milestone: " + milestone);
-        console.log("Node milestone: " + nodeInfo.latestMilestoneIndex);
+        console.log("Coordinator milestone: " + cooMilestone);
+        console.log("Node milestone: " + nodeMilestone);
 
         var nodeSynced = false;
 
-        if (milestone > nodeInfo.latestMilestoneIndex) {
-            if ((milestone - config.maxMilestoneTolerance) <= nodeInfo.latestMilestoneIndex) nodeSynced = true;
+        if (cooMilestone > nodeMilestone) {
+            if ((cooMilestone - config.maxMilestoneTolerance) <= nodeMilestone) nodeSynced = true;
         } else {
-            if ((nodeInfo.latestMilestoneIndex - config.maxMilestoneTolerance) <= milestone) nodeSynced = true;
+            if ((nodeMilestone - config.maxMilestoneTolerance) <= cooMilestone) nodeSynced = true;
         }
         
         var callbackValues = {};
         callbackValues.nodeSynced = nodeSynced;
-        callbackValues.nodeMilestone = nodeInfo.latestMilestoneIndex;
+        callbackValues.nodeMilestone = nodeMilestone;
+        callbackValues.nodeInfo = nodeInfo;
 
         callback(callbackValues);       
         
@@ -94,25 +96,5 @@ function GetNodeInfo(callback, node)
             callback(nodeInfo);
         }
     })
-}
- 
-function GetLatestMilestoneIndex(callback)
-{
-    https.get('https://x-vps.com/lmsi', (resp) => {
-        let data = '';
-        
-        // A chunk of data has been recieved
-        resp.on('data', (chunk) => {
-            data += chunk;
-        });
-        
-        // The whole response has been received. Return the result
-        resp.on('end', () => {
-            callback(JSON.parse(data).latestMilestoneIndex);
-        });
-        
-    }).on("error", (err) => {
-        console.log("Error: " + err.message);
-    });  
 }
 
