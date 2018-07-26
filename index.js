@@ -1,7 +1,5 @@
 var config = require("./config");
 var notifications = require("./notifications");
-
-var https = require('https');
 var IOTA = require('iota.lib.js');
 
 Init();
