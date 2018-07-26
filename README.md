@@ -15,7 +15,7 @@ All other settings are self explanatory.
 
 ## Start the script
 
-In order to start the script, open your command line, browse to the iota.node.monitor direcotry and tpye the following: 
+In order to start the script, open your command line, browse to the iota.node.monitor directory and tpye the following: 
 
 ```
 node index.js
