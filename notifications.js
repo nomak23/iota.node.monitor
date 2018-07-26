@@ -3,16 +3,16 @@ var nodemailer = require('nodemailer');
 
 module.exports = {
 
-    SendNotification: function (node)
+    SendNotification: function (node, nodeInfo)
     {
         var nodeName = (node.name == "") ? "" : " (" + node.name + ")";
         var subject = "IOTA node " + node.host + ":" + node.port + nodeName + " is out of sync";
-        var bodytext = "Time of check: " + Date(Date.now()) + "\n\n" + "Coordinator milestone: " + node.nodeInfo.latestMilestoneIndex  + "\n\n" + "Node milestone: " + nodeInfo.latestSolidSubtangleMilestoneIndex;
+        var bodytext = "Time of check: " + Date(Date.now()) + "\n\n" + "Coordinator milestone: " + nodeInfo.latestMilestoneIndex  + "\n\n" + "Node milestone: " + nodeInfo.latestSolidSubtangleMilestoneIndex;
 
         SendEmail(subject, bodytext, false);
     },
 
-    SendRecoveryNotification: function (node)
+    SendRecoveryNotification: function (node, nodeInfo)
     {
         var nodeName = (node.name == "") ? "" : " (" + node.name + ")";
         var subject = "IOTA node " + node.host + ":" + node.port + nodeName + " is synced again";

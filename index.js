@@ -29,7 +29,7 @@ function CheckNodes() {
             if(!callbackValues.nodeSynced) {
                 if(!node.notificationSent)
                 {
-                    notifications.SendNotification(node, callbackValues.nodeMilestone);
+                    notifications.SendNotification(node, callbackValues.nodeInfo);
                 }
 
                 node.isSynced = false;
@@ -37,7 +37,7 @@ function CheckNodes() {
             } else {                    
                 if(!node.isSynced && config.sendRecoveryMessages)
                 {
-                    notifications.SendRecoveryNotification(node);
+                    notifications.SendRecoveryNotification(node, callbackValues.nodeInfo);
                 }
 
                 node.isSynced = true;
@@ -74,7 +74,6 @@ function CheckNode(callback, node)
         
         var callbackValues = {};
         callbackValues.nodeSynced = nodeSynced;
-        callbackValues.nodeMilestone = nodeMilestone;
         callbackValues.nodeInfo = nodeInfo;
 
         callback(callbackValues);       
