@@ -63,13 +63,13 @@ function CheckNode(callback, node)
         console.log("Node milestone: " + nodeMilestone);
 
         var nodeSynced = false;
+                
+        if (cooMilestone >= nodeMilestone) {
+            var difference = cooMilestone - nodeMilestone;
 
-        if (cooMilestone > nodeMilestone) {
-            if ((cooMilestone - config.maxMilestoneTolerance) <= nodeMilestone) nodeSynced = true;
-        } else {
-            if ((nodeMilestone - config.maxMilestoneTolerance) <= cooMilestone) nodeSynced = true;
+            nodeSynced = difference <= config.maxMilestoneTolerance;            
         }
-        
+                
         var callbackValues = {};
         callbackValues.nodeSynced = nodeSynced;
         callbackValues.nodeInfo = nodeInfo;
