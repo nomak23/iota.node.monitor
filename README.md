@@ -1,6 +1,6 @@
 # iota.node.monitor
 
-iota.node.monitor is a Node.js script to monitor IOTA nodes and receive email notifications if the node is out of sync. 
+iota.node.monitor is a Node.js script to check if IOTA nodes are synced to the latest milestone and receive email notifications if the node is out of sync. 
 
 ## Configuration
 
